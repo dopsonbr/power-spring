@@ -1,0 +1,3 @@
+[submodule "ps-sample-service"]
+	path = ps-sample-service
+	url = https://github.com/dopsonbr/ps-sample-service

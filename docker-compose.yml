@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  service_net:
+
+services:
+  
+  client:
+    build:
+      context: ./ps-client
+    networks:
+      - service_net
+
+  load_test:
+    build:
+      context: ./ps-tester
+    networks:
+      - service_net
+
+  router:
+    build:
+      context: ./ps-router
+    environment:
+      SERVER_PORT: 80
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - service_net
+
+  web_service:
+    build:
+      context: ./ps-sample-service
+    environment:
+      SERVER_PORT: 80
+    networks:
+      - service_net
