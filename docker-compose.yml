@@ -1,8 +1,13 @@
 version: '3'
 
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
 networks:
   service_net:
 
+# the order the services are declared is the order they needto start in
 services:
   
   eureka_server:
@@ -16,6 +21,52 @@ services:
     networks:
       - service_net
 
+  config_server:
+    build:
+      context: ./ps-config-server
+    environment:
+      SERVER_PORT: 80
+      SPRING_PROFILES_ACTIVE: cloud, docker
+    networks:
+      - service_net
+    depends_on:
+      - eureka_server
+
+  admin_server:
+    build:
+      context: ./ps-admin-server
+    ports:
+      - 9000:80
+    environment:
+      SERVER_PORT: 80
+      SPRING_PROFILES_ACTIVE: cloud, docker
+    networks:
+      - service_net
+    depends_on:
+      - config_server
+
+  router:
+    build:
+      context: ./ps-router
+    environment:
+      SERVER_PORT: 80
+      SPRING_PROFILES_ACTIVE: cloud, docker
+    networks:
+      - service_net
+    depends_on:
+      - admin_server
+
+  web_service:
+    build:
+      context: ./ps-sample-service
+    environment:
+      SERVER_PORT: 80
+      SPRING_PROFILES_ACTIVE: cloud, docker
+    networks:
+      - service_net
+    depends_on:
+      - router
+
   client:
     build:
       context: ./ps-client
@@ -28,40 +79,30 @@ services:
     networks:
       - service_net
 
-  config_server:
-    build:
-      context: ./ps-config-server
-    environment:
-      SERVER_PORT: 80
-      SPRING_PROFILES_ACTIVE: cloud, docker
-    networks:
-      - service_net
-
-  admin_server:
-    build:
-      context: ./ps-admin-server
-    ports:
-      - 9000:80
-    environment:
-      SERVER_PORT: 80
-      SPRING_PROFILES_ACTIVE: cloud, docker
-    networks:
-      - service_net
-
-  router:
-    build:
-      context: ./ps-router
-    environment:
-      SERVER_PORT: 80
-      SPRING_PROFILES_ACTIVE: cloud, docker
-    networks:
-      - service_net
-
-  web_service:
-    build:
-      context: ./ps-sample-service
-    environment:
-      SERVER_PORT: 80
-      SPRING_PROFILES_ACTIVE: cloud, docker
-    networks:
-      - service_net
+#  prometheus:
+#    image: prom/prometheus
+#    volumes:
+#      - ./prometheus-main/app
+#      - prometheus_data:/prometheus
+#    command:
+#      - '--config.file=/etc/prometheus/prometheus.yml'
+#      - '--storage.tsdb.path=/prometheus'
+#      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+#      - '--web.console.templates=/usr/share/prometheus/consoles'
+#    ports:
+#      - 9090:9090
+#    depends_on:
+#      - router
+#
+#  grafana:
+#    image: grafana/grafana
+#    depends_on:
+#      - prometheus
+#    ports:
+#      - 3000:3000
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#    env_file:
+#      - ps-grafana/config.monitoring
+#    networks:
+#      - service_net
