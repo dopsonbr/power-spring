@@ -10,3 +10,18 @@
 [submodule "ps-config-repo"]
 	path = ps-config-repo
 	url = https://github.com/dopsonbr/ps-config-repo
+[submodule "ps-client"]
+	path = ps-client
+	url = https://github.com/dopsonbr/ps-client
+[submodule "ps-config-server"]
+	path = ps-config-server
+	url = https://github.com/dopsonbr/ps-config-server
+[submodule "ps-eureka-server"]
+	path = ps-eureka-server
+	url = https://github.com/dopsonbr/ps-eureka-server
+[submodule "ps-router"]
+	path = ps-router
+	url = https://github.com/dopsonbr/ps-router
+[submodule "ps-tester"]
+	path = ps-tester
+	url = https://github.com/dopsonbr/ps-tester
