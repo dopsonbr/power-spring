@@ -25,3 +25,6 @@
 [submodule "ps-tester"]
 	path = ps-tester
 	url = https://github.com/dopsonbr/ps-tester
+[submodule "ps-service-a"]
+	path = ps-service-a
+	url = https://github.com/dopsonbr/ps-service-a
