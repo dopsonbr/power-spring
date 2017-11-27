@@ -28,3 +28,6 @@
 [submodule "ps-service-a"]
 	path = ps-service-a
 	url = https://github.com/dopsonbr/ps-service-a
+[submodule "ps-service-b"]
+	path = ps-service-b
+	url = https://github.com/dopsonbr/ps-service-b

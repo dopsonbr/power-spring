@@ -28,4 +28,4 @@ scrape_configs:
     metrics_path: '/prometheus'
 
     static_configs:
-      - targets: ['eureka-server:8761', 'config-server:8888', 'admin-server:9000', 'router:8060', 'service-a:8080']
+      - targets: ['router:8060']
